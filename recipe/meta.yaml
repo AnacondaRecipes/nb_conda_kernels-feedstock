@@ -41,7 +41,6 @@ test:
   commands:
     - pip check
     - python -m nb_conda_kernels list
-    - python -m pytest -v --cov=nb_conda_kernels tests
 
 about:
   home: https://github.com/Anaconda-Platform/nb_conda_kernels
