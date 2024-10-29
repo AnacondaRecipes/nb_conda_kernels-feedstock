@@ -1,4 +1,4 @@
-{% set version = "2.3.1" %}
+{% set version = "2.5.0" %}
 
 package:
   name: nb_conda_kernels
@@ -6,35 +6,58 @@ package:
 
 source:
   url: https://github.com/Anaconda-Platform/nb_conda_kernels/archive/{{ version }}.tar.gz
-  sha256: 47dddde4f05376d4b457309bfcf0d5b1099fa86eed95df4681bbde95932d7a18
+  sha256: c306ec3db5188ee48493cee717667486592e696fb9aa8ed9041c40cf4e3ddfe5
 
 build:
+  noarch: python
   number: 0
 
 requirements:
   host:
     - python
+    - setuptools
+    - wheel
     - pip
   run:
-    - python
-    - notebook >=4.2.0
+    - python >=3.6
+    - jupyter_client >=4.2
+    - jupyter_core
+    - psutil
+  run_constrained:
+    - notebook >=5.3.0
 
 test:
+  source_files:
+    - setup.cfg
+    - tests
   requires:
     - pip
+    - pytest
+    - pytest-cov
+    - ipykernel
+    - notebook <7
+    - requests
+    - mock
   commands:
     - pip check
-  imports:
-    - nb_conda_kernels
+    - python -m nb_conda_kernels list
 
 about:
   home: https://github.com/Anaconda-Platform/nb_conda_kernels
-  license: BSD 3-Clause
+  summary: "This extension enables a Jupyter Notebook or JupyterLab application in one conda environment to access kernels for Python, R, and other languages found in other environments"
+  description: "This extension enables a Jupyter Notebook or JupyterLab application in one conda environment to access kernels for Python, R, and other languages found in other environments"
+  dev_url: https://github.com/anaconda/nb_conda_kernels
+  doc_url: https://github.com/anaconda/nb_conda_kernels
+  license: BSD-3-Clause
   license_file: LICENSE
+  license_family: BSD
   summary: Launch Jupyter kernels for any installed conda environment
 
 extra:
+  skip-lints:
+    - avoid_noarch
+    - missing_imports_or_run_test_py
+
   recipe-maintainers:
-    - ocefpaf
-    - damianavila
     - mcg1969
+    - bkreider
