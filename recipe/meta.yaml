@@ -23,6 +23,9 @@ requirements:
     - python
     - jupyter_client >=4.2
     - jupyter_core
+    # nb_conda_kernels expexts jupyter_server or notebook <7 at runtime,
+    # see https://github.com/anaconda/nb_conda_kernels/blob/2.5.0/nb_conda_kernels/install.py#L16-L29
+    # but jupyter_server isn't mentioned in requirements
     - jupyter_server
     # traitlets isn't mentioned in requirements
     # but it's used here https://github.com/anaconda/nb_conda_kernels/blob/2.5.0/nb_conda_kernels/manager.py#L14
@@ -42,7 +45,7 @@ test:
     - pytest
     - pytest-cov
     - ipykernel
-    - notebook
+    - notebook <7
     - requests
     - mock
   commands:
