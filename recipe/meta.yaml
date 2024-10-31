@@ -11,7 +11,7 @@ source:
 build:
   # notebook <7 isn't available for py>=312 on s390x
   skip: true  # [s390x]
-  number: 0
+  number: 1
 
 requirements:
   host:
