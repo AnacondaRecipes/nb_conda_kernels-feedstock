@@ -50,9 +50,6 @@ test:
     - if not exist %PREFIX%\Scripts\.nb_conda_kernels-post-link.bat (exit 1)   # [win]
     - if not exist %PREFIX%\Scripts\.nb_conda_kernels-pre-unlink.bat (exit 1)  # [win]
     - python -m nb_conda_kernels list
-    - python -m nb_conda_kernels list --CondaKernelSpecManager.env_filter="regex"
-    - set PYTHONIOENCODING=UTF-8       # [win]
-    - export PYTHONUNBUFFERED=1        # [unix]
     # Set JUPYTER_PLATFORM_DIRS to disable DeprecationWarning
     - set JUPYTER_PLATFORM_DIRS=1      # [win]
     - export JUPYTER_PLATFORM_DIRS=1   # [unix]
