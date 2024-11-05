@@ -1,4 +1,4 @@
-{% set version = "2.5.0" %}
+{% set version = "2.5.2" %}
 
 package:
   name: nb_conda_kernels
@@ -6,12 +6,12 @@ package:
 
 source:
   url: https://github.com/Anaconda-Platform/nb_conda_kernels/archive/{{ version }}.tar.gz
-  sha256: c306ec3db5188ee48493cee717667486592e696fb9aa8ed9041c40cf4e3ddfe5
+  sha256: 6474e7f5889f87ad20a539d45020ba07dd8fc73c82aba71290d855b1fbf048a7
 
 build:
   # notebook <7 isn't available for py>=312 on s390x
   skip: true  # [s390x]
-  number: 1
+  number: 0
 
 requirements:
   host:
@@ -43,7 +43,6 @@ test:
   requires:
     - pip
     - pytest
-    - pytest-cov
     - ipykernel
     - notebook
     - requests
@@ -59,8 +58,8 @@ test:
     - set JUPYTER_PLATFORM_DIRS=1      # [win]
     - export JUPYTER_PLATFORM_DIRS=1   # [unix]
     - jupyter --paths
-    # Skip test_configuration and test_install_kernelspec because they seem to be broken.
-    - pytest -vvv tests -k "not (test_configuration or test_install_kernelspec)" --disable-pytest-warnings
+    # Skips any tests that assume the existence of the testbed
+    - python -m pytest -v -m "not testbed" tests --disable-pytest-warnings
 
 about:
   home: https://github.com/Anaconda-Platform/nb_conda_kernels
