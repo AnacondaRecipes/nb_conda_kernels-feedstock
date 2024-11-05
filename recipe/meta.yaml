@@ -1,4 +1,4 @@
-{% set version = "2.5.0" %}
+{% set version = "2.5.2" %}
 
 package:
   name: nb_conda_kernels
@@ -6,10 +6,11 @@ package:
 
 source:
   url: https://github.com/Anaconda-Platform/nb_conda_kernels/archive/{{ version }}.tar.gz
-  sha256: c306ec3db5188ee48493cee717667486592e696fb9aa8ed9041c40cf4e3ddfe5
+  sha256: 6474e7f5889f87ad20a539d45020ba07dd8fc73c82aba71290d855b1fbf048a7
 
 build:
-  noarch: python
+  # notebook <7 isn't available for py>=312 on s390x
+  skip: true  # [s390x]
   number: 0
 
 requirements:
@@ -19,33 +20,50 @@ requirements:
     - wheel
     - pip
   run:
-    - python >=3.6
+    - python
     - jupyter_client >=4.2
     - jupyter_core
+    # traitlets isn't mentioned in requirements
+    # but it's used here https://github.com/anaconda/nb_conda_kernels/blob/2.5.0/nb_conda_kernels/manager.py#L14
+    - traitlets
     - psutil
   run_constrained:
     - notebook >=5.3.0
 
 test:
+  imports:
+    - nb_conda_kernels
   source_files:
     - setup.cfg
     - tests
   requires:
     - pip
     - pytest
-    - pytest-cov
     - ipykernel
-    - notebook <7
+    - notebook
     - requests
     - mock
   commands:
     - pip check
+    - test -f ${PREFIX}/bin/.nb_conda_kernels-post-link.sh   # [unix]
+    - test -f ${PREFIX}/bin/.nb_conda_kernels-pre-unlink.sh  # [unix]
+    - if not exist %PREFIX%\Scripts\.nb_conda_kernels-post-link.bat (exit 1)   # [win]
+    - if not exist %PREFIX%\Scripts\.nb_conda_kernels-pre-unlink.bat (exit 1)  # [win]
     - python -m nb_conda_kernels list
+    # Set JUPYTER_PLATFORM_DIRS to disable DeprecationWarning
+    - set JUPYTER_PLATFORM_DIRS=1      # [win]
+    - export JUPYTER_PLATFORM_DIRS=1   # [unix]
+    - jupyter --paths
+    # Skips any tests that assume the existence of the testbed
+    - python -m pytest -v -m "not testbed" tests --disable-pytest-warnings
 
 about:
   home: https://github.com/Anaconda-Platform/nb_conda_kernels
-  summary: "This extension enables a Jupyter Notebook or JupyterLab application in one conda environment to access kernels for Python, R, and other languages found in other environments"
-  description: "This extension enables a Jupyter Notebook or JupyterLab application in one conda environment to access kernels for Python, R, and other languages found in other environments"
+  summary: Package for managing conda environment-based kernels inside of Jupyter
+  description: |
+    This extension enables a Jupyter Notebook or JupyterLab application
+    in one conda environment to access kernels for Python, R,
+    and other languages found in other environments"
   dev_url: https://github.com/anaconda/nb_conda_kernels
   doc_url: https://github.com/anaconda/nb_conda_kernels
   license: BSD-3-Clause
@@ -54,10 +72,6 @@ about:
   summary: Launch Jupyter kernels for any installed conda environment
 
 extra:
-  skip-lints:
-    - avoid_noarch
-    - missing_imports_or_run_test_py
-
   recipe-maintainers:
     - mcg1969
     - bkreider
