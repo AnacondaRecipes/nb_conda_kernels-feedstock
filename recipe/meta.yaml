@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/Anaconda-Platform/nb_conda_kernels/archive/{{ version }}.tar.gz
-  sha256: 6474e7f5889f87ad20a539d45020ba07dd8fc73c82aba71290d855b1fbf048a7
+  sha256: f987a852e077eeed3614b9cc16012ba3f2be52a5e8eb07a2191ad9975b282178
 
 build:
   number: 1
