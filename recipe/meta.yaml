@@ -9,7 +9,7 @@ source:
   sha256: f987a852e077eeed3614b9cc16012ba3f2be52a5e8eb07a2191ad9975b282178
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   host:
@@ -25,7 +25,6 @@ requirements:
     # but it's used here https://github.com/anaconda/nb_conda_kernels/blob/2.5.0/nb_conda_kernels/manager.py#L14
     - traitlets
     - psutil
-  run_constrained:
     - notebook >=5.3.0
 
 test:
